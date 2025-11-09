@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useParams, notFound } from 'next/navigation';
-import dynamic from 'next/dynamic';
+import dynamicImport from 'next/dynamic';
 import Layout from '@/components/layout';
 import Comments from '@/components/comments';
 import Ratings from '@/components/ratings';
@@ -17,7 +17,7 @@ import { blogApi } from '@/lib/api';
 import { formatDate, calculateReadingTime } from '@/lib/utils';
 
 // Dynamically import EditBlogForm - only loads when Edit button is clicked
-const EditBlogForm = dynamic(() => import('@/components/edit-blog-form'), {
+const EditBlogForm = dynamicImport(() => import('@/components/edit-blog-form'), {
     loading: () => <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
         <div className="bg-white p-8 rounded-lg">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
@@ -26,6 +26,9 @@ const EditBlogForm = dynamic(() => import('@/components/edit-blog-form'), {
     </div>,
     ssr: false, // Disable server-side rendering for this component
 });
+
+// Tell Next.js this is a dynamic route that should not be pre-rendered
+export const dynamic = 'force-dynamic';
 
 export default function BlogPage() {
     const params = useParams();
